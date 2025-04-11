@@ -24,7 +24,6 @@
     "chat.commandCenter.enabled": true,
 
     "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
-    "github.copilot.editor.enableAutoCompletions": true,
     "github.copilot.editor.enableCodeActions": true,
     "github.copilot.renameSuggestions.triggerAutomatically": true,
     "workbench.commandPalette.experimental.askChatLocation": "chatView",

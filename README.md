@@ -113,12 +113,6 @@ GitHub Copilot 的功能是透過安裝**擴充套件**來實現的，你需要�
         
         > 你也可以用 `F1` > `GitHub Copilot: Change Completion Model` 選擇。
 
-      * `github.copilot.editor.enableAutoCompletions` 設定為 `true`
-
-        啟用程式碼自動補全功能，也就是 Inline 自動完成功能。
-
-        因為自動完成功能經常會提供錯誤的提示，有些人會選擇關閉這個選項。
-
       * `github.copilot.editor.enableCodeActions` 設定為 `true`
 
         控制 Copilot 命令在可用時是否顯示為 **Code Actions** (程式碼動作)
