@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/doggy8088-github-copilot-configs-badge.png)](https://mseep.ai/app/doggy8088-github-copilot-configs)
+
 # 最佳 GitHub Copilot 設定
 
 大家好，我是 Will 保哥，我之前開了三堂關於 GitHub Copilot 的課程，為了這些課程，我精心準備了許多 GitHub Copilot 的應用技巧。為了更好的應用這些 GitHub Copilot 這個好用工具，我測試了幾乎所有 GitHub Copilot 的選項設定，這個 Repo 就是用來整理我認為的 GitHub Copilot **最佳設定**，讓學員們能夠在課程中更輕鬆的使用 GitHub Copilot！👍
