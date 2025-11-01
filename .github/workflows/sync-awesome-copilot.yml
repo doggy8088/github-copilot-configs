@@ -71,6 +71,20 @@ jobs:
           else
             echo "⚠️ 來源 prompts 資料夾不存在"
           fi
+
+      - name: 同步 agents 資料夾
+        run: |
+          # 移除舊的資料夾並建立新的
+          rm -rf agents
+          mkdir -p agents
+          
+          # 複製檔案
+          if [ -d "/tmp/awesome-copilot/agents" ]; then
+            cp -r /tmp/awesome-copilot/agents/* agents/
+            echo "✅ 成功同步 agents 資料夾"
+          else
+            echo "⚠️ 來源 agents 資料夾不存在"
+          fi
           
       - name: 清理臨時檔案
         run: rm -rf /tmp/awesome-copilot
@@ -102,3 +116,4 @@ jobs:
           echo "   chatmodes: $(find chatmodes -name '*.md' 2>/dev/null | wc -l) 個檔案"
           echo "   instructions: $(find instructions -name '*.md' 2>/dev/null | wc -l) 個檔案"
           echo "   prompts: $(find prompts -name '*.md' 2>/dev/null | wc -l) 個檔案"
+          echo "   agents: $(find agents -name '*.md' 2>/dev/null | wc -l) 個檔案"

@@ -7,6 +7,7 @@
 - **chatmodes/**: GitHub Copilot 聊天模式設定檔
 - **instructions/**: GitHub Copilot 指令檔案
 - **prompts/**: GitHub Copilot 提示檔案
+- **agents/**: GitHub Copilot 代理檔案
 
 ## 同步時間
 
