@@ -23,6 +23,47 @@ Verify the project uses the toolkit by checking for:
 - Ensure all UI respects Visual Studio themes
 - Follow VSSDK and VSTHRD analyzer rules
 - Produce testable, maintainable extension code
+- **Adhere to `.editorconfig` settings** when present in the repository
+
+## Code Style (.editorconfig)
+
+**If an `.editorconfig` file exists in the repository, all generated and modified code MUST follow its rules.**
+
+This includes but is not limited to:
+- Indentation style (tabs vs spaces) and size
+- Line endings and final newline requirements
+- Naming conventions (fields, properties, methods, etc.)
+- Code style preferences (`var` usage, expression bodies, braces, etc.)
+- Analyzer severity levels and suppressions
+
+Before generating code, check for `.editorconfig` in the repository root and apply its settings. When in doubt, match the style of surrounding code in the file being edited.
+
+## .NET Framework and C# Language Constraints
+
+**Visual Studio extensions target .NET Framework 4.8** but can use modern C# syntax (up to C# 14) with constraints imposed by the .NET Framework runtime.
+
+### ✅ Supported Modern C# Features
+- Primary constructors
+- File-scoped namespaces
+- Global usings
+- Pattern matching (all forms)
+- Records (with limitations)
+- `init` accessors
+- Target-typed `new`
+- Nullable reference types (annotations only)
+- Raw string literals
+- Collection expressions
+
+### ❌ Not Supported (.NET Framework Limitations)
+- `Span<T>`, `ReadOnlySpan<T>`, `Memory<T>` (no runtime support)
+- `IAsyncEnumerable<T>` (without polyfill packages)
+- Default interface implementations
+- `Index` and `Range` types (no runtime support for `^` and `..` operators)
+- `init`-only setters on structs (runtime limitation)
+- Some `System.Text.Json` features
+
+### Best Practice
+When writing code, prefer APIs available in .NET Framework 4.8. If a modern API is needed, check if a polyfill NuGet package exists (e.g., `Microsoft.Bcl.AsyncInterfaces` for `IAsyncEnumerable<T>`).
 
 ## Example Prompt Behaviors
 

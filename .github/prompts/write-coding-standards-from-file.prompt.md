@@ -1,7 +1,7 @@
 ---
 agent: "agent"
 description: "Write a coding standards document for a project using the coding styles from the file(s) and/or folder(s) passed as arguments in the prompt."
-tools: ['createFile', 'editFiles', 'fetch', 'githubRepo', 'search', 'testFailure']
+tools: ['createFile', 'editFiles', 'web/fetch', 'githubRepo', 'search', 'testFailure']
 ---
 
 # Write Coding Standards From File
