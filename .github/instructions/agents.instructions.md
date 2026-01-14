@@ -76,6 +76,176 @@ infer: true
 - Only supported for organization/enterprise level agents
 - See "MCP Server Configuration" section below
 
+#### **handoffs** (OPTIONAL, VS Code only)
+- Enable guided sequential workflows that transition between agents with suggested next steps
+- List of handoff configurations, each specifying a target agent and optional prompt
+- After a chat response completes, handoff buttons appear allowing users to move to the next agent
+- Only supported in VS Code (version 1.106+)
+- See "Handoffs Configuration" section below for details
+
+## Handoffs Configuration
+
+Handoffs enable you to create guided sequential workflows that transition seamlessly between custom agents. This is useful for orchestrating multi-step development workflows where users can review and approve each step before moving to the next one.
+
+### Common Handoff Patterns
+
+- **Planning → Implementation**: Generate a plan in a planning agent, then hand off to an implementation agent to start coding
+- **Implementation → Review**: Complete implementation, then switch to a code review agent to check for quality and security issues
+- **Write Failing Tests → Write Passing Tests**: Generate failing tests, then hand off to implement the code that makes those tests pass
+- **Research → Documentation**: Research a topic, then transition to a documentation agent to write guides
+
+### Handoff Frontmatter Structure
+
+Define handoffs in the agent file's YAML frontmatter using the `handoffs` field:
+
+```yaml
+---
+description: 'Brief description of the agent'
+name: 'Agent Name'
+tools: ['search', 'read']
+handoffs:
+  - label: Start Implementation
+    agent: implementation
+    prompt: 'Now implement the plan outlined above.'
+    send: false
+  - label: Code Review
+    agent: code-review
+    prompt: 'Please review the implementation for quality and security issues.'
+    send: false
+---
+```
+
+### Handoff Properties
+
+Each handoff in the list must include the following properties:
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `label` | string | Yes | The display text shown on the handoff button in the chat interface |
+| `agent` | string | Yes | The target agent identifier to switch to (name or filename without `.agent.md`) |
+| `prompt` | string | No | The prompt text to pre-fill in the target agent's chat input |
+| `send` | boolean | No | If `true`, automatically submits the prompt to the target agent (default: `false`) |
+
+### Handoff Behavior
+
+- **Button Display**: Handoff buttons appear as interactive suggestions after a chat response completes
+- **Context Preservation**: When users select a handoff button, they switch to the target agent with conversation context maintained
+- **Pre-filled Prompt**: If a `prompt` is specified, it appears pre-filled in the target agent's chat input
+- **Manual vs Auto**: When `send: false`, users must review and manually send the pre-filled prompt; when `send: true`, the prompt is automatically submitted
+
+### Handoff Configuration Guidelines
+
+#### When to Use Handoffs
+
+- **Multi-step workflows**: Breaking down complex tasks across specialized agents
+- **Quality gates**: Ensuring review steps between implementation phases
+- **Guided processes**: Directing users through a structured development process
+- **Skill transitions**: Moving from planning/design to implementation/testing specialists
+
+#### Best Practices
+
+- **Clear Labels**: Use action-oriented labels that clearly indicate the next step
+  - ✅ Good: "Start Implementation", "Review for Security", "Write Tests"
+  - ❌ Avoid: "Next", "Go to agent", "Do something"
+
+- **Relevant Prompts**: Provide context-aware prompts that reference the completed work
+  - ✅ Good: `'Now implement the plan outlined above.'`
+  - ❌ Avoid: Generic prompts without context
+
+- **Selective Use**: Don't create handoffs to every possible agent; focus on logical workflow transitions
+  - Limit to 2-3 most relevant next steps per agent
+  - Only add handoffs for agents that naturally follow in the workflow
+
+- **Agent Dependencies**: Ensure target agents exist before creating handoffs
+  - Handoffs to non-existent agents will be silently ignored
+  - Test handoffs to verify they work as expected
+
+- **Prompt Content**: Keep prompts concise and actionable
+  - Refer to work from the current agent without duplicating content
+  - Provide any necessary context the target agent might need
+
+### Example: Complete Workflow
+
+Here's an example of three agents with handoffs creating a complete workflow:
+
+**Planning Agent** (`planner.agent.md`):
+```yaml
+---
+description: 'Generate an implementation plan for new features or refactoring'
+name: 'Planner'
+tools: ['search', 'read']
+handoffs:
+  - label: Implement Plan
+    agent: implementer
+    prompt: 'Implement the plan outlined above.'
+    send: false
+---
+# Planner Agent
+You are a planning specialist. Your task is to:
+1. Analyze the requirements
+2. Break down the work into logical steps
+3. Generate a detailed implementation plan
+4. Identify testing requirements
+
+Do not write any code - focus only on planning.
+```
+
+**Implementation Agent** (`implementer.agent.md`):
+```yaml
+---
+description: 'Implement code based on a plan or specification'
+name: 'Implementer'
+tools: ['read', 'edit', 'search', 'execute']
+handoffs:
+  - label: Review Implementation
+    agent: reviewer
+    prompt: 'Please review this implementation for code quality, security, and adherence to best practices.'
+    send: false
+---
+# Implementer Agent
+You are an implementation specialist. Your task is to:
+1. Follow the provided plan or specification
+2. Write clean, maintainable code
+3. Include appropriate comments and documentation
+4. Follow project coding standards
+
+Implement the solution completely and thoroughly.
+```
+
+**Review Agent** (`reviewer.agent.md`):
+```yaml
+---
+description: 'Review code for quality, security, and best practices'
+name: 'Reviewer'
+tools: ['read', 'search']
+handoffs:
+  - label: Back to Planning
+    agent: planner
+    prompt: 'Review the feedback above and determine if a new plan is needed.'
+    send: false
+---
+# Code Review Agent
+You are a code review specialist. Your task is to:
+1. Check code quality and maintainability
+2. Identify security issues and vulnerabilities
+3. Verify adherence to project standards
+4. Suggest improvements
+
+Provide constructive feedback on the implementation.
+```
+
+This workflow allows a developer to:
+1. Start with the Planner agent to create a detailed plan
+2. Hand off to the Implementer agent to write code based on the plan
+3. Hand off to the Reviewer agent to check the implementation
+4. Optionally hand off back to planning if significant issues are found
+
+### Version Compatibility
+
+- **VS Code**: Handoffs are supported in VS Code 1.106 and later
+- **GitHub.com**: Not currently supported; agent transition workflows use different mechanisms
+- **Other IDEs**: Limited or no support; focus on VS Code implementations for maximum compatibility
+
 ## Tool Configuration
 
 ### Tool Specification Strategies
