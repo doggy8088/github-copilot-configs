@@ -38,7 +38,7 @@ Follow the steps **sequentially** and **do not attempt to upgrade all projects a
 2. Start with **independent class library projects** (least dependencies).
 3. Gradually move to projects with **higher dependencies** (e.g., APIs, Azure Functions).
 4. Ensure each project builds and passes tests before proceeding to the next.
-5. Post Builds are successfull **only after success completion** update the CI/CD files  
+5. Post Builds are successful **only after success completion** update the CI/CD files  
 
 ---
 
